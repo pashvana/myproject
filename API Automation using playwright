@@ -1,0 +1,286 @@
+// auth.setup.ts
+import test, { expect, test as setup } from '@playwright/test';
+import  * as fs from 'fs';
+var authtoken ;
+var dactoken ;
+
+
+test('authenticate', async ({ page }) => {
+  // Perform authentication steps. Replace these actions with your own.
+  test.slow();
+  await page.goto('https://powersuite-dev.unifysquare.com/');
+//await page.getByRole('button', { name: 'Sign in' }).click(); 
+  await page.locator('//input[@type="email"]').fill('powersuite-dev-unifysquare-demo@dharmanaut.org');
+  await page.locator('//button[@type="submit"]').click();
+  await page.locator('//input[@id="1-email"]').fill('powersuite-dev-unifysquare-demo@dharmanaut.org');
+  await page.locator('//input[@type="password"]').fill('yoS0/!$f');
+  await page.locator('//button[@type="submit"]').click();
+  
+  const responsePromise = await page.waitForRequest('https://userdac.dev.powersuite.unifysquare.com/api/v1/tenantDacSettings/16c94e3a-bf75-43b6-ab3f-3252f4c9052d')
+  // await page.context().storageState({ path: authFile });
+  await page.reload();
+  const response = await responsePromise;
+  //await console.log(await response.headerValue("authorization"));
+ // const authtoken = await response.headerValue("authorization");
+ authtoken = await response.headerValue("authorization");
+  const rbearer = authtoken?.slice(7);
+  console.log(rbearer);
+  console.log("*******************************************");
+  await console.log(await response.headerValue("user-dac"));
+  dactoken = await response.headerValue("user-dac");
+  const jsonData = JSON.stringify(authtoken);
+  const jsonData1 = JSON.stringify(dactoken);
+  fs.writeFileSync('AuthenticationCredentialsJSON.json', jsonData);
+  fs.writeFileSync('userdac.json',jsonData1);
+
+});
+
+/*
+test('read file', async ({ request }) => {
+ authtoken = fs.readFileSync('AuthenticationCredentialsJSON.json', 'utf-8');
+ console.log(authtoken);
+  const response = await  request.post('https://api.dev.powersuite.unifysquare.com/xmo/xlas/v1',{
+
+  headers: {
+    'Authorization': "Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6Ijc1MzA5QTE4NEI3MTNBMDc0OTgwRTlCOUM0RUNEMEI0M0RCQzQ3OEUiLCJ0eXAiOiJKV1QifQ.eyJzdWIiOiJwb3dlcnN1aXRlLWRldi11bmlmeXNxdWFyZS1kZW1vQGRoYXJtYW5hdXQub3JnIiwiaHR0cDovL3VuaWZ5c3F1YXJlLmNvbS9yb2xlIjpbIkFnZW50TWFuYWdlciIsIkRldmljZU1hbmFnZXIiLCJFeGVjdXRpdmUiLCJIZWxwRGVzayIsIkx5bmNFbmdpbmVlciIsIlBsYXRmb3JtTW9uaXRvcmluZyIsIlBubXNSZWFkT25seSIsIlJvb21Nb25pdG9yaW5nIiwiU2VjdXJpdHlFbmdpbmVlciIsIlNlcnZpY2VNYW5hZ2VyIiwiU2VydmljZU93bmVyIiwiVXNlciIsIlZpcFN1cHBvcnQiLCJWb2ljZUVuZ2luZWVyIl0sImh0dHA6Ly91bmlmeXNxdWFyZS5jb20vdGVuYW50IjoiMTZjOTRlM2EtYmY3NS00M2I2LWFiM2YtMzI1MmY0YzkwNTJkIiwibmJmIjoxNjgxMjI1NjQyLCJleHAiOjE2ODEyMjc0NDIsImlhdCI6MTY4MTIyNTY0MiwiaXNzIjoiaHR0cHM6Ly9wb3dlcnN1aXRlLWRldi51bmlmeXNxdWFyZS5jb20vIiwiYXVkIjoiaHR0cHM6Ly9wb3dlcnN1aXRlLnVuaWZ5c3F1YXJlLmNvbS8ifQ.n2ih62svJy4i5xlSBnqTgxWsdhGS1d8bmTAWpx2qH0REgNloRrfldrEvoEzLQSKtJvgUKEAwJErP1VZ2r80nN_9cnzO1lfpfYILgJ23JqvHgccAzaqmDusx-WpkZqp9oumRfb1QoK2VbMUFnn5UF_8Ms8pzSwXD8vMGEdMmwOjguQGRjhFqy6WoVU85UPx29Yz83wa1yWfJVNwKzbnY2755sExlETNsQ0lfe8xehvEi9GahBxYn0lN-F_HlEt3svQsjHsSnsFzU9o_xDCs_jI07EG1i57uNRUPZtEZ-2OurT9QxL6iltHRC_G8p8Gms2Hw-dTNd4vCT4btJMuo507g",
+    'user-dac' :dactoken
+  },
+})  
+
+//console.log(await response.json());
+
+*/
+const rawdatayear = '{ XLAEvent(tenantId:"16c94e3a-bf75-43b6-ab3f-3252f4c9052d",start:"2023-01-01",granularity:"year",periods:6) {timestamp,flow,balance,velocity} }'
+const rawdataweek = '{ XLAEvent(tenantId:"16c94e3a-bf75-43b6-ab3f-3252f4c9052d",start:"2023-01-01",granularity:"week",periods:5) {timestamp,flow,balance,velocity} }'
+const rawdatamonth = '{ XLAEvent(tenantId:"16c94e3a-bf75-43b6-ab3f-3252f4c9052d",start:"2023-01-01",granularity:"month",periods:12) {timestamp,flow,balance,velocity} }'
+
+const rawdata1 ='{ DeviceRefresh(tenantId: "16c94e3a-bf75-43b6-ab3f-3252f4c9052d", eventId: "e69c96e2-4116-4f57-a41f-3e593050709b", offset: 50, take: 4,orgFilter:"1") {timestamp,deviceId,fqdn,deviceModel,refreshScore,osVersionContribution,ramContribution,xlaDeviationContribution,xlaTrendContribution,os,ram,flowDegradation,balanceDegradation,velocityDegradation,flowUpwardTrend,balanceUpwardTrend,velocityUpwardTrend} }'
+const drall = '{DeviceRefresh(tenantId: "16c94e3a-bf75-43b6-ab3f-3252f4c9052d", eventId: "e69c96e2-4116-4f57-a41f-3e593050709b", offset: 1, take: 3,orgFilter:"4") {timestamp,deviceId,fqdn,deviceModel,refreshScore,osVersionContribution,ramContribution,xlaDeviationContribution,xlaTrendContribution,flowDegradation,balanceDegradation,velocityDegradation,flowUpwardTrend,balanceUpwardTrend,velocityUpwardTrend}}'
+const fourrecords = '{DeviceRefresh(tenantId: "16c94e3a-bf75-43b6-ab3f-3252f4c9052d", eventId: "e69c96e2-4116-4f57-a41f-3e593050709b", offset: 995, take: 20) {timestamp,fqdn,flowDegradation,balanceDegradation,velocityDegradation,deviceModel,refreshScore}}'
+const fqdnetc = '{DeviceRefresh(tenantId: "16c94e3a-bf75-43b6-ab3f-3252f4c9052d", eventId: "e69c96e2-4116-4f57-a41f-3e593050709b", offset: 1, take: 60) {fqdn,deviceModel,refreshScore}}'
+const benchmark = '{DeviceXLAs(start: "2023-01-01",granularity: "day",periods: 13){timestamp, flow, balance, velocity}}'
+const devicefit = '{DeviceFit(tenantId: "16c94e3a-bf75-43b6-ab3f-3252f4c9052d", eventId: "ddeb6902-1b09-435a-83b3-a3ddfb13ddb1", offset: 1, take:16 ,orgFilter: "1|2") {timestamp,fqdn,ramInGB,cpuModel,gpuModel,fitScore,underUtilizationScore,}}'
+const devicefitmissingteanat = '{DeviceFit(tenantId: eventId: "ddeb6902-1b09-435a-83b3-a3ddfb13ddb1", offset: 1, take:16 ,orgFilter: "1|2") {timestamp,fqdn,ramInGB,cpuModel,gpuModel,fitScore,underUtilizationScore,}}'
+const devicefitinvalidtenant = '{DeviceFit(tenantId: "63c4e133-1494-46d6-b2bb-b9e902369bc9", eventId: "ddeb6902-1b09-435a-83b3-a3ddfb13ddb1", offset: 1, take:16 ,orgFilter: "1|2") {timestamp,fqdn,ramInGB,cpuModel,gpuModel,fitScore,underUtilizationScore,}}'
+const devicevulnerability = '{DeviceVulnerability(tenantId: "16c94e3a-bf75-43b6-ab3f-3252f4c9052d", eventId: "ddeb6902-1b09-435a-83b3-a3ddfb13ddb1", offset: 1, take: 13,orgFilter: "1|2") {timestamp,fqdn,cveId,cpeType,cpeProductVendor,cpeProductName,cpeProductVersion,cpeProductTargetHardware,riskCategory,recommendation}}'
+const devicevulnerabilitymissingteanat = '{DeviceVulnerability(tenantId:  eventId: "ddeb6902-1b09-435a-83b3-a3ddfb13ddb1", offset: 1, take: 13,orgFilter: "1|2") {timestamp,fqdn,cveId,cpeType,cpeProductVendor,cpeProductName,cpeProductVersion,cpeProductTargetHardware,riskCategory,recommendation}}'
+const devicevulnerabilityinvalidteanat = '{DeviceVulnerability(tenantId: "63c4e133-1494-46d6-b2bb-b9e902369bc9", eventId: "ddeb6902-1b09-435a-83b3-a3ddfb13ddb1", offset: 1, take: 13,orgFilter: "1|2") {timestamp,fqdn,cveId,cpeType,cpeProductVendor,cpeProductName,cpeProductVersion,cpeProductTargetHardware,riskCategory,recommendation}}'
+
+
+
+
+
+test.describe("api testing",() =>{
+ // const bea = authtoken;
+  console.log(authtoken);
+  console.log(dactoken);
+  console.log("**************************");
+  test('XLA Event-Fetch 5 months record', async ({ request }) => {
+   const response = await  request.post('https://api.dev.powersuite.unifysquare.com/xmo/xlas/v1',{
+   // const response = await request.get('https://api.publicapis.org/entries',{  
+       headers: {
+        'Authorization': authtoken,
+        'user-dac':dactoken,
+      
+      },
+       data: rawdatayear
+      
+    
+    });
+    expect (response.status()).toBe(200);
+   const statuses = await response.json();
+   const responseb = JSON.stringify(statuses);
+   console.log(responseb);
+       
+  });
+ 
+  test('XLA Event-Fetch 5 weeks records', async ({ request }) => {
+    const response = await  request.post('https://api.dev.powersuite.unifysquare.com/xmo/xlas/v1',{
+    // const response = await request.get('https://api.publicapis.org/entries',{  
+        headers: {
+         'Authorization': authtoken,
+         'user-dac':dactoken
+       },
+        data: rawdataweek     
+     });
+     expect (response.status()).toBe(200);
+    const statuses = await response.json();
+    const responseb = JSON.stringify(statuses);
+    console.log(responseb); 
+   });
+   test('XLA Event-Fetch 12 months record', async ({ request }) => {
+    const response = await  request.post('https://api.dev.powersuite.unifysquare.com/xmo/xlas/v1',{
+    // const response = await request.get('https://api.publicapis.org/entries',{  
+        headers: {
+         'Authorization': authtoken,
+         'user-dac':dactoken
+       },
+        data: rawdatamonth 
+     });
+     expect (response.status()).toBe(200);
+    const statuses = await response.json();
+    const responseb = JSON.stringify(statuses);
+    console.log(responseb);  
+   });
+   
+  test('Device Refresh-all metrics with 5 records', async ({ request }) => {
+    const response = await  request.post('https://api.dev.powersuite.unifysquare.com/xmo/xlas/v1',{
+        headers: {
+         'Authorization': authtoken,
+         'user-dac':dactoken
+       },
+        data: drall
+     });
+     expect (response.status()).toBe(200);
+    const statuses = await response.json();
+    const responseb1 = JSON.stringify(statuses);
+    console.log(responseb1);  
+   });
+   
+   test('Device refresh-fetch 4 device refreshes starting at 50th worst ', async ({ request }) => {
+    const response = await  request.post('https://api.dev.powersuite.unifysquare.com/xmo/xlas/v1',{
+        headers: {
+         'Authorization': authtoken,
+         'user-dac':dactoken
+       },
+        data: rawdata1
+     });
+     expect (response.status()).toBe(200);
+    const statuses = await response.json();
+    const responseb1 = JSON.stringify(statuses);
+    console.log(responseb1);  
+   });
+   test('Device refresh -fetch only 5 device refreshes starting at 995th worst when requesting 20 for Unifysquare Demo', async ({ request }) => {
+    const response = await  request.post('https://api.dev.powersuite.unifysquare.com/xmo/xlas/v1',{
+        headers: {
+         'Authorization': authtoken,
+         'user-dac':dactoken
+       },
+        data: fourrecords
+     });
+     expect (response.status()).toBe(200);
+    const statuses = await response.json();
+    const responseb1 = JSON.stringify(statuses);
+    console.log(responseb1);  
+   });
+   test('Device refresh -fetch refresh score,fqdn and device model', async ({ request }) => {
+    const response = await  request.post('https://api.dev.powersuite.unifysquare.com/xmo/xlas/v1',{
+        headers: {
+         'Authorization': authtoken,
+         'user-dac':dactoken
+       },
+        data: fqdnetc
+     });
+     expect (response.status()).toBe(200);
+    const statuses = await response.json();
+    const responseb1 = JSON.stringify(statuses);
+    console.log(responseb1);  
+   });
+   test('Bench mark XLAs', async ({ request }) => {
+    const response = await  request.post('https://api.dev.powersuite.unifysquare.com/xmo/xlas/v1',{
+        headers: {
+         'Authorization': authtoken,
+         'user-dac':dactoken,
+         "Content-Type": "text/plain"
+       },
+        data: benchmark
+     });
+     expect (response.status()).toBe(200);
+    const statuses = await response.json();
+    const responseb1 = JSON.stringify(statuses);
+    console.log(responseb1);  
+   });
+
+   test('Device Fit', async ({ request }) => {
+    const response = await  request.post('https://api.dev.powersuite.unifysquare.com/xmo/xlas/v1',{
+        headers: {
+         'Authorization': authtoken,
+         'user-dac':dactoken,
+         "Content-Type": "text/plain"
+       },
+        data: devicefit
+     });
+     expect (response.status()).toBe(200);
+    const statuses = await response.json();
+    const responseb1 = JSON.stringify(statuses);
+    console.log(responseb1);  
+   });
+/*
+   test('Device Fit missing tenant', async ({ request }) => {
+    const response = await  request.post('https://api.dev.powersuite.unifysquare.com/xmo/xlas/v1',{
+        headers: {
+         'Authorization': authtoken,
+         'user-dac':dactoken,
+         "Content-Type": "text/plain"
+       },
+        data: devicefitmissingteanat
+     });
+     expect (response.status()).toBe(400);
+    const statuses = await response.json();
+    const responseb1 = JSON.stringify(statuses);
+    console.log(responseb1);  
+   });
+
+   test('Device Fit invalid tenant', async ({ request }) => {
+    const response = await  request.post('https://api.dev.powersuite.unifysquare.com/xmo/xlas/v1',{
+        headers: {
+         'Authorization': authtoken,
+         'user-dac':dactoken,
+         "Content-Type": "text/plain"
+       },
+        data: devicefitinvalidtenant
+     });
+     expect (response.status()).toBe(404);
+    const statuses = await response.json();
+    const responseb1 = JSON.stringify(statuses);
+    console.log(responseb1);  
+   });
+*/
+   test('Device vulnerability', async ({ request }) => {
+    const response = await  request.post('https://api.dev.powersuite.unifysquare.com/xmo/xlas/v1',{
+        headers: {
+         'Authorization': authtoken,
+         'user-dac':dactoken,
+         "Content-Type": "text/plain"
+       },
+        data: devicevulnerability
+     });
+     expect (response.status()).toBe(200);
+    const statuses = await response.json();
+    const responseb1 = JSON.stringify(statuses);
+    console.log(responseb1);  
+   });
+/*
+   test('Device vulnerability missing teanant', async ({ request }) => {
+    const response = await  request.post('https://api.dev.powersuite.unifysquare.com/xmo/xlas/v1',{
+        headers: {
+         'Authorization': authtoken,
+         'user-dac':dactoken,
+         "Content-Type": "text/plain"
+       },
+        data: devicevulnerabilitymissingteanat
+     });
+     expect (response.status()).toBe(400);
+    const statuses = await response.json();
+    const responseb1 = JSON.stringify(statuses);
+    console.log(responseb1);  
+   });
+
+   test('Device vulnerability invalid tenant ', async ({ request }) => {
+    const response = await  request.post('https://api.dev.powersuite.unifysquare.com/xmo/xlas/v1',{
+        headers: {
+         'Authorization': authtoken,
+         'user-dac':dactoken,
+         "Content-Type": "text/plain"
+       },
+        data: devicevulnerabilityinvalidteanat
+     });
+     expect (response.status()).toBe(404);
+    const statuses = await response.json();
+    const responseb1 = JSON.stringify(statuses);
+    console.log(responseb1);  
+   });
+
+*/
+});
+
