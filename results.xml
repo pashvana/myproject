@@ -1,0 +1,129 @@
+<testsuites id="" name="" tests="16" failures="1" skipped="14" errors="0" time="33.2721">
+<testsuite name="src\tests\specs\XMO\PowerSuiteLogin.spec.ts" timestamp="2024-09-30T10:25:40.865Z" hostname="" tests="16" failures="1" skipped="14" time="25.614" errors="0">
+<testcase name="Powersuite login  " classname="src\tests\specs\XMO\PowerSuiteLogin.spec.ts" time="0">
+<properties>
+<property name="skip" value="">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="PowerSuite login with Unifysquare account" classname="src\tests\specs\XMO\PowerSuiteLogin.spec.ts" time="23.12">
+<properties>
+<property name="slow" value="">
+</property>
+</properties>
+<system-out>
+<![CDATA[https://powersuite-preview.unifysquare.com/
+
+[[ATTACHMENT|test-results\src-tests-specs-XMO-PowerS-9031b-in-with-Unifysquare-account\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Navigate to Unisys-Demo Tenant " classname="src\tests\specs\XMO\PowerSuiteLogin.spec.ts" time="0">
+<properties>
+<property name="skip" value="">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Navigate to UnifySquare-Nestlé Tenant " classname="src\tests\specs\XMO\PowerSuiteLogin.spec.ts" time="2.494">
+<properties>
+<property name="slow" value="">
+</property>
+</properties>
+<failure message="PowerSuiteLogin.spec.ts:42:9 Navigate to UnifySquare-Nestlé Tenant " type="FAILURE">
+<![CDATA[  src\tests\specs\XMO\PowerSuiteLogin.spec.ts:42:9 › Navigate to UnifySquare-Nestlé Tenant  ────────
+
+    Error: locator.click: Target page, context or browser has been closed
+    Call log:
+      - waiting for locator('[ng-if="currentTenant"]')
+
+
+       at src\tests\pages\XMO\PowerSuite_Login_page.ts:112
+
+      110 |  }
+      111 |  async Switch_To_UnifySquare_Nestlé_Tenant(){
+    > 112 |   await this.tenantdropdown.click();
+          |                             ^
+      113 |  await this.search.fill("UnifySquare-Nestlé");
+      114 |  await this.tenantselection.first().click();
+      115 |  await new Promise(f => setTimeout(f, 12000));
+
+        at powersuit_Login_page.Switch_To_UnifySquare_Nestlé_Tenant (C:\Users\HussaiS2\PlaywrightAutomation\src\tests\pages\XMO\PowerSuite_Login_page.ts:112:29)
+        at C:\Users\HussaiS2\PlaywrightAutomation\src\tests\specs\XMO\PowerSuiteLogin.spec.ts:47:25
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\src-tests-specs-XMO-PowerS-ef1d8--UnifySquare-Nestlé-Tenant-\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\src-tests-specs-XMO-PowerS-ef1d8--UnifySquare-Nestlé-Tenant-\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\src-tests-specs-XMO-PowerS-ef1d8--UnifySquare-Nestlé-Tenant-\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="UI Loading Functionality-All buttons/Link visible" classname="src\tests\specs\XMO\PowerSuiteLogin.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Platform Drop Down Functionality" classname="src\tests\specs\XMO\PowerSuiteLogin.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Microsoft_Teams_Modalities_Dropdown_Functionality" classname="src\tests\specs\XMO\PowerSuiteLogin.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Microsoft_Teams_Time_Granularity_Functionality" classname="src\tests\specs\XMO\PowerSuiteLogin.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Service Health Poor Calls-Audio Days datapoints Validation Page " classname="src\tests\specs\XMO\PowerSuiteLogin.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Service Health Poor Calls(Audio) Callscenario &amp; Breakdown &amp;Navigation to Operations Dashbord " classname="src\tests\specs\XMO\PowerSuiteLogin.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Service Health Poor Calls-Video Days datapoints Validation Page " classname="src\tests\specs\XMO\PowerSuiteLogin.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Service Health Poor Calls(Video) Callscenario &amp; Breakdown &amp;Navigation to Operations Dashbord " classname="src\tests\specs\XMO\PowerSuiteLogin.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Service Health Poor Calls-App Sharing Days datapoints Validation Page " classname="src\tests\specs\XMO\PowerSuiteLogin.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Service Health Poor Calls(AppSharing) Callscenario &amp; Breakdown &amp;Navigation to Operations Dashbord " classname="src\tests\specs\XMO\PowerSuiteLogin.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Service Health Poor Calls(App Sharing) Comments delete and add functionality " classname="src\tests\specs\XMO\PowerSuiteLogin.spec.ts" time="0">
+<properties>
+<property name="skip" value="">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Geo Heirarchy Drop Down1 Functionality" classname="src\tests\specs\XMO\PowerSuiteLogin.spec.ts" time="0">
+<properties>
+<property name="skip" value="">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+</testsuites>
